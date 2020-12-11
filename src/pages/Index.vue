@@ -1,7 +1,7 @@
 <template>
-  <q-page class="flex flex-center">
-    <task-list/>
-  </q-page>
+  <div class="flex flex-center">
+    <task-list />
+  </div>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <task-item v-for=" (task, index) in tasks " :key="'task'+index" :task="task" />
-    </div>
+  <q-list bordered separator class="task-list">
+    <task-item v-for="(task, index) in tasks " :key="'task'+index" :task="task" />
+  </q-list>
 </template>
 
 <script>
