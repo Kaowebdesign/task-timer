@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item @left="removeTask" class="task-item" right-color="red-13">
+  <q-slide-item @right="removeTask" class="task-item" right-color="red-13">
     <template v-slot:right>
       <q-icon name="delete" />
     </template>
@@ -12,7 +12,7 @@
       <div class="column items-start">
         <div class="col">
           <q-item-section class="task-item__title">
-            <router-link :to="task.id" class="no-default-link">
+            <router-link :to="`/tasks/${task.id}`" class="no-default-link">
               {{ task.name }}
             </router-link>
             </q-item-section>
@@ -41,7 +41,8 @@ export default {
   },
   methods: {
     removeTask () {
-      console.log(this.id)
+      console.log(this.task.id)
+      this.$store.dispatch('tasks/DELETE_TASK', { id: this.task.id })
     }
   }
 }

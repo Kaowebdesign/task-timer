@@ -5,7 +5,9 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: '/:id', component: () => import('pages/Task.vue') }
+      { path: '/tasks/:id', component: () => import('pages/Task.vue') },
+      { path: '/tasks', component: () => import('pages/Tasks.vue') },
+      { path: '/create-task', component: () => import('pages/CreateTask.vue') }
     ]
   },
 
