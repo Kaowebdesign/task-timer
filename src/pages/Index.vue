@@ -8,7 +8,9 @@
         <router-link to="/tasks" class="color__grey null-link">See all</router-link>
       </div>
     </div>
-    <task-list />
+    <q-scroll-area style="height: 300px;">
+      <task-list />
+    </q-scroll-area>
   </div>
 </template>
 

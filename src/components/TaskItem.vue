@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { DELETE_TASK } from 'src/store/tasks/actions'
 export default {
   name: 'TaskItem',
   props: {
@@ -41,8 +42,7 @@ export default {
   },
   methods: {
     removeTask () {
-      console.log(this.task.id)
-      this.$store.dispatch('tasks/DELETE_TASK', { id: this.task.id })
+      this.$store.dispatch(`tasks/${DELETE_TASK}`, { id: this.task.id })
     }
   }
 }
