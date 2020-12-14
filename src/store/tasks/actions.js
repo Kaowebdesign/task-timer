@@ -24,6 +24,7 @@ export const actions = {
         name: payload.name,
         tags: payload.tags,
         time: payload.time,
+        finished: false,
         color: '#' + String(Math.random().toString(16).slice(2, 8).toUpperCase()).replace(/[^0-9a-f]/gi, '')
       }
       commit(`${ADD_NEW_TASK}`, task)

@@ -73,38 +73,58 @@ export default {
       timerFill: null
     }
   },
+  computed: {
+    convertedTime () {
+      let time = ''
+      if (this.task) {
+        const userTime = this.task.time.split(':')
+        const hours = +userTime[0] * 1000 * 60 * 60
+        const minutes = +userTime[1] * 1000 * 60
+        time = hours + minutes
+      }
+      return time
+    }
+  },
   methods: {
     start () {
       const self = this
       self.stop = false
       var interval = 10
-      this.timer = setInterval(function () {
+      this.timer = window.setInterval(function () {
         self.intervalCounter += interval
         if (!self.stop) {
           if ((self.intervalCounter % 1000) === 0) {
-            self.currentTime += 1000
-            console.log(self.currentTime)
-            let appendHour = self.currentTime / (1000 * 60 * 60) | 0
-            let appendMinute = self.currentTime % (1000 * 60 * 60) / (1000 * 60) | 0
-            let appendSecond = self.currentTime % (1000 * 60) / 1000 | 0
-            appendHour = appendHour < 10 ? '0' + appendHour : appendHour
-            appendMinute = appendMinute < 10 ? '0' + appendMinute : appendMinute
-            appendSecond = appendSecond < 10 ? '0' + appendSecond : appendSecond
-            self.hour = appendHour
-            self.min = appendMinute
-            self.sec = appendSecond
+            if (+self.currentTime === self.convertedTime) {
+              window.clearInterval(self.timer)
+              self.stop = false
+              self.finish = true
+              self.timerFill = 100
+            } else {
+              self.currentTime += 1000
+              self.timerFill = (+self.currentTime * 100) / self.convertedTime
+              let appendHour = self.currentTime / (1000 * 60 * 60) | 0
+              let appendMinute = self.currentTime % (1000 * 60 * 60) / (1000 * 60) | 0
+              let appendSecond = self.currentTime % (1000 * 60) / 1000 | 0
+              appendHour = appendHour < 10 ? '0' + appendHour : appendHour
+              appendMinute = appendMinute < 10 ? '0' + appendMinute : appendMinute
+              appendSecond = appendSecond < 10 ? '0' + appendSecond : appendSecond
+              self.hour = appendHour
+              self.min = appendMinute
+              self.sec = appendSecond
+            }
           }
         }
       }, 10)
     },
     startAndStop () {
       this.stop = !this.stop
-      clearInterval(this.timer)
+      window.clearInterval(this.timer)
     },
     stopTimer () {
       this.stop = !this.stop
       this.finish = true
-      clearInterval(this.timer)
+      this.timerFill = 100
+      window.clearInterval(this.timer)
     }
   }
 }
