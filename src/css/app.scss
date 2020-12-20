@@ -8,6 +8,9 @@
         }
     }
 }
+.finished{
+    background: $grey-3;
+}
 .color{
     &__black{
         color: $dark;

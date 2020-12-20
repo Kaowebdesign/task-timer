@@ -1,10 +1,11 @@
 import { LocalStorage, Notify } from 'quasar'
-import { SET_TASKS, ADD_NEW_TASK, DELETE_TASK_BY_ID } from './mutations'
+import { SET_TASKS, ADD_NEW_TASK, DELETE_TASK_BY_ID, FINISH_TASK_BY_ID } from './mutations'
 
 export const SAVE_TASKS = 'SAVE_TASKS'
 export const LOAD_TASKS = 'LOAD_TASKS'
 export const ADD_TASK = 'ADD_TASK'
 export const DELETE_TASK = 'DELETE_TASK'
+export const FINISH_TASK = 'FINISH_TASK'
 
 export const actions = {
   [`${SAVE_TASKS}`] ({ state }) {
@@ -34,6 +35,12 @@ export const actions = {
         html: true
       })
       resolve(task.id)
+    })
+  },
+  [`${FINISH_TASK}`] ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      commit(`${FINISH_TASK_BY_ID}`, { taskId: payload.taskId })
+      resolve()
     })
   },
   [`${DELETE_TASK}`] ({ commit, dispatch }, payload) {

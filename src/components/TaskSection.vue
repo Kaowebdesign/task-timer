@@ -39,7 +39,7 @@
                 </q-knob>
               </div>
           </div>
-          <div class="row q-pb-xl" v-if="!finish">
+          <div class="row q-pb-xl" v-if="!task.finished">
               <div class="col flex justify-center">
                 <q-btn v-if="stop" round color="deep-purple-10" icon="play_arrow" @click="start"/>
                 <q-btn v-else round color="deep-purple-10" icon="pause" @click="startAndStop"/>
@@ -52,6 +52,8 @@
     </q-card>
 </template>
 <script>
+import * as workerTimers from 'worker-timers'
+import { FINISH_TASK, SAVE_TASKS } from 'src/store/tasks/actions'
 export default {
   name: 'TaskSection',
   props: {
@@ -90,7 +92,7 @@ export default {
       const self = this
       self.stop = false
       var interval = 10
-      this.timer = window.setInterval(function () {
+      this.timer = workerTimers.setInterval(function () {
         self.intervalCounter += interval
         if (!self.stop) {
           if ((self.intervalCounter % 1000) === 0) {
@@ -99,6 +101,9 @@ export default {
               self.stop = false
               self.finish = true
               self.timerFill = 100
+              this.$store.dispatch(`tasks/${FINISH_TASK}`, { taskId: this.task.id }).then(() => {
+                this.$store.dispatch(`${SAVE_TASKS}`)
+              })
             } else {
               self.currentTime += 1000
               self.timerFill = (+self.currentTime * 100) / self.convertedTime
@@ -118,13 +123,29 @@ export default {
     },
     startAndStop () {
       this.stop = !this.stop
-      window.clearInterval(this.timer)
+      workerTimers.clearInterval(this.timer)
     },
     stopTimer () {
       this.stop = !this.stop
       this.finish = true
       this.timerFill = 100
-      window.clearInterval(this.timer)
+      this.$store.dispatch(`tasks/${FINISH_TASK}`, { taskId: this.task.id }).then(() => {
+        this.$store.dispatch(`${SAVE_TASKS}`)
+      })
+      workerTimers.clearInterval(this.timer)
+    }
+  },
+  created () {
+    if (this.task.finished) {
+      this.timerFill = 100
+      const userTime = this.task.time.split(':')
+      this.hour = userTime[0]
+      this.min = userTime[1]
+    }
+  },
+  beforeDestroy () {
+    if (this.timer) {
+      workerTimers.clearInterval(this.timer)
     }
   }
 }
